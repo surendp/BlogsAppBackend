@@ -22,9 +22,11 @@ blogsRouter.get('/:id', async (request, response) => {
 
 blogsRouter.post('/', async (request, response) => {
   const body = request.body
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  const decodedToken = request.token
+    ? jwt.verify(request.token, process.env.SECRET)
+    : null
 
-  if (!request.token || !decodedToken.id) {
+  if (!request.token || !(decodedToken && decodedToken.id)) {
     return response
       .status(401)
       .json({ error: 'token missing or invalid' })
@@ -48,7 +50,16 @@ blogsRouter.post('/', async (request, response) => {
 blogsRouter.put('/:id', async (request, response) => {
   const blogId = request.params.id
   const existingBlog = await Blog.findById(blogId)
-  const userId = jwt.verify(request.token, process.env.SECRET).id
+  const userId = request.token
+    ? jwt.verify(request.token, process.env.SECRET).id
+    : null
+
+  if (!request.token || !userId) {
+    return response
+      .status(401)
+      .json({ error: 'token missing or invalid' })
+  }
+
   const body = request.body
   const blog = {
     title: body.title,
@@ -74,9 +85,12 @@ blogsRouter.delete('/:id', async (request, response) => {
   const id = request.params.id
   const blog = await Blog.findById(id)
   const token = request.token
-  const userId = jwt.verify(token, process.env.SECRET).id
+  const userId = token
+   ? jwt.verify(token, process.env.SECRET).id
+   : null
 
   if (!(blog
+    && token
     && blog.user.toString() === userId.toString())) {
     return response.status(401).json({
       error: 'unauthorized access denied'

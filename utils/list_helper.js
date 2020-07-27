@@ -1,8 +1,6 @@
 const _ = require('lodash')
 const logger = require('../utils/logger')
 
-const dummy = blogs => 1
-
 const totalLikes = blogs => {
   return blogs.reduce((accumulator, currentValue) => (
     accumulator + currentValue.likes
@@ -60,7 +58,6 @@ const mostLikes = blogs => {
 }
 
 module.exports = {
-  dummy,
   totalLikes,
   favoriteBlog,
   mostBlogs,

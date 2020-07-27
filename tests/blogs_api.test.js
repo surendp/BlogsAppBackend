@@ -63,6 +63,20 @@ test('successfully creates new blog', async () => {
   expect(response.body.length).toBe(helper.initialBlogs.length + 1)
 })
 
+test('adding a blog fails with proper status code 401 Unauthorized', async () => {
+  const newBlog = {
+    title: 'New blog shoud be created',
+    author: 'Surendra Pandey',
+    url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmless.html',
+    likes: 4,
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(401)
+})
+
 test('default value of likes is 0', async () => {
   const token = await helper.getToken(api)
   const newBlog = {
@@ -81,6 +95,7 @@ test('default value of likes is 0', async () => {
 })
 
 test('missing title and url properties responds with 400 status code', async () =>  {
+  const token = await helper.getToken(api)
   const newBlogMissingTitle = {
     author: 'Surendra Pandey',
     url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmless.html',
@@ -96,11 +111,13 @@ test('missing title and url properties responds with 400 status code', async () 
   await api
     .post('/api/blogs')
     .send(newBlogMissingTitle)
+    .set({ Authorization: token })
     .expect(400)
 
   await api
     .post('/api/blogs')
     .send(newBlogMissingUrl)
+    .set({ Authorization: token })
     .expect(400)
 
 })
