@@ -1,0 +1,10 @@
+PUT http://localhost:3001/api/blogs/5f1aa0119ee879387408cb97
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InN1cmVuZHAiLCJpZCI6IjVmMTlmYzExMDBjNjkzMTU1NDhkMTY1MiIsImlhdCI6MTU5NTUzOTMyNX0.CVVREga1Aei-tLWRguK4n3I88zMgcxMkA3ucnejkn4g
+
+{
+  "title": "(Updated) Java programming as the second learned language",
+  "author": "Suren Pandey",
+  "url": "yahoo.com",
+  "likes": 10
+}
