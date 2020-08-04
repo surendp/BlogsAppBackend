@@ -44,7 +44,11 @@ blogsRouter.post('/', async (request, response) => {
   user.blogs = [ ...user.blogs, savedBlog._id ]
   await user.save()
 
-  response.status(201).json(savedBlog)
+  const blogForResponse = await Blog
+    .findById(savedBlog.id)
+    .populate('user', { username: 1, name: 1, id: 1 })
+
+  response.status(201).json(blogForResponse)
 })
 
 blogsRouter.put('/:id', async (request, response) => {
@@ -67,14 +71,14 @@ blogsRouter.put('/:id', async (request, response) => {
     url: body.url,
     likes: body.likes,
   }
-
+  /* 
   if (!(existingBlog
     && existingBlog.user.toString() === userId.toString())) {
     return response.status(401).json({
       error: 'unauthorized access denied'
     })
   }
-
+ */
   const updatedBlog = await Blog
     .findByIdAndUpdate(request.params.id, blog, { new: true })
   
