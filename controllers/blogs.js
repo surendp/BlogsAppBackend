@@ -9,6 +9,8 @@ blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog
     .find({})
     .populate('user', { username: 1, name: 1, id: 1 })
+    .populate('comments', { comment: 1, id: 1 })
+
   response.json(blogs)
 })
 
@@ -17,6 +19,7 @@ blogsRouter.get('/:id', async (request, response) => {
   const blog = await Blog
     .findById(id)
     .populate('user', { username: 1, name: 1, id: 1 })
+    .populate('comments', { comment: 1, id: 1 })
   response.json(blog)
 })
 
@@ -47,6 +50,7 @@ blogsRouter.post('/', async (request, response) => {
   const blogForResponse = await Blog
     .findById(savedBlog.id)
     .populate('user', { username: 1, name: 1, id: 1 })
+    .populate('comments', { comment: 1, id: 1 })
 
   response.status(201).json(blogForResponse)
 })
@@ -71,16 +75,11 @@ blogsRouter.put('/:id', async (request, response) => {
     url: body.url,
     likes: body.likes,
   }
-  /* 
-  if (!(existingBlog
-    && existingBlog.user.toString() === userId.toString())) {
-    return response.status(401).json({
-      error: 'unauthorized access denied'
-    })
-  }
- */
+
   const updatedBlog = await Blog
     .findByIdAndUpdate(request.params.id, blog, { new: true })
+    .populate('user', { username: 1, name: 1, id: 1 })
+    .populate('comments', { comment: 1, id: 1 })
   
   response.json(updatedBlog)
 })
