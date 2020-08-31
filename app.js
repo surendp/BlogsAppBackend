@@ -41,6 +41,10 @@ if (process.env.NODE_ENV === 'test') {
   app.use('/api/testing', testingRouter)
 }
 
+// serve the frontend application when request
+// arrives at the default route of the application
+app.use(express.static(path.join(__dirname, 'build')))
+
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
 
