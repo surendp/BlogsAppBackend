@@ -1,7 +1,6 @@
 const config = require('./utils/config')
 const logger = require('./utils/logger')
 const middleware = require('./utils/middleware')
-const path = require('path')
 const express = require('express')
 require('express-async-errors')
 const mongoose = require('mongoose')
@@ -44,7 +43,7 @@ if (process.env.NODE_ENV === 'test') {
 
 // serve the frontend application when request
 // arrives at the default route of the application
-app.use(express.static(path.join(__dirname, 'build')))
+app.use(express.static('build'))
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
