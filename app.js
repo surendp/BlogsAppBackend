@@ -41,11 +41,16 @@ if (process.env.NODE_ENV === 'test') {
   app.use('/api/testing', testingRouter)
 }
 
+// Unknown API route handler
+app.use('/api/*', middleware.unknownEndpoint)
+
 // serve the frontend application when request
 // arrives at the default route of the application
 app.use(express.static('build'))
 
-app.use(middleware.unknownEndpoint)
+// Unknown static route handler
+app.use('/*', express.static('build'))
+
 app.use(middleware.errorHandler)
 
 module.exports = app
